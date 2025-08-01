@@ -9,9 +9,9 @@ st.set_page_config(page_title="LoL Draft Graph", layout="wide")
 # Data
 st.title("📊 Visualização da Tabela de Matchups")
 
-file_path = "matchup_stats.xlsx" 
+file_path = "matchup_stats.csv" 
 
-df = pd.read_excel(file_path)
+df = pd.read_csv(file_path)
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Funções
 
