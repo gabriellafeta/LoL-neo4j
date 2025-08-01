@@ -7,7 +7,6 @@ st.set_page_config(page_title="LoL Draft Graph", layout="wide")
 
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Data
-st.title("📊 Visualização da Tabela de Matchups")
 
 file_path = "matchup_stats.csv" 
 
@@ -43,9 +42,6 @@ col1, col2, col3, col4, col5 = st.columns(5)
 
 with colA[0]:
     st.title("📊 Visualização da Tabela de Matchups")
-
-with colB[0]:
-    st.dataframe(df)
 
 with col1:
     league_filter = st.selectbox("League", options=["Todos"] + sorted(df['league'].dropna().unique().tolist()))
