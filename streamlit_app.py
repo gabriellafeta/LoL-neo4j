@@ -73,3 +73,9 @@ filtered_df = apply_filters(
 # Mostrar resultado
 st.markdown(f"### Resultado com {len(filtered_df)} linhas")
 st.dataframe(filtered_df)
+
+try:
+    import openpyxl
+    st.success("✅ openpyxl instalado com sucesso!")
+except ImportError:
+    st.error("❌ openpyxl não está instalado.")
