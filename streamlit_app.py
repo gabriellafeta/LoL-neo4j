@@ -8,11 +8,6 @@ st.set_page_config(page_title="LoL Draft Graph", layout="wide")
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Data
 st.title("📊 Visualização da Tabela de Matchups")
-try:
-    import openpyxl
-    st.success("✅ openpyxl instalado com sucesso!")
-except ImportError:
-    st.error("❌ openpyxl não está instalado.")
 
 file_path = "matchup_stats.xlsx" 
 
