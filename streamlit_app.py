@@ -1,5 +1,7 @@
 import pandas as pd
 import streamlit as st
+from pyvis.network import Network
+import streamlit.components.v1 as components
 
 
 # Configuração do Streamlit
@@ -13,7 +15,7 @@ file_path = "matchup_stats.csv"
 df = pd.read_csv(file_path)
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Funções
-
+# Filtros
 def apply_filters(df, league, playoffs, split, side, position, champion, matchup):
     filtered = df.copy()
     if league != "All":
@@ -32,7 +34,23 @@ def apply_filters(df, league, playoffs, split, side, position, champion, matchup
         filtered = filtered[filtered["champion_matchup"] == matchup]
     return filtered
 
+# Gerar arestas
+def generate_edges(df):
+    edges = []
+    for _, row in df.iterrows():
+        source = row["champion"]
+        target = row["champion_matchup"]
 
+        # Exemplo com WinRateTag
+        relation = row["WinRateTag"]  # ou "EarlyGameType", ou ambas
+
+        edges.append({
+            "source": source,
+            "target": target,
+            "relation": relation,
+            "weight": row["WinRate"]  # ou outra métrica contínua
+        })
+    return edges
 
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Cols
@@ -79,3 +97,30 @@ filtered_df = apply_filters(
 # Mostrar resultado
 st.markdown(f"### Resultado com {len(filtered_df)} linhas")
 st.dataframe(filtered_df)
+##--------------------------------------------------------------------------------------------------------------------------------
+edges = generate_edges(filtered_df)
+nodes = set()
+
+net = Network(height="600px", width="100%", bgcolor="#222", font_color="white")
+
+# Adiciona arestas com cor baseada na tag
+for edge in edges:
+    nodes.add(edge["source"])
+    nodes.add(edge["target"])
+    color = "red" if edge["relation"] == "Historically bad" else "green"
+
+    net.add_edge(edge["source"], edge["target"], 
+                 title=f"{edge['relation']}<br>{edge['weight']:.1f}%", 
+                 color=color)
+
+# Adiciona os nós com imagem dos campeões
+for champ in nodes:
+    champ_clean = champ.replace(" ", "").replace("'", "")
+    img_url = f"https://ddragon.leagueoflegends.com/cdn/14.14.1/img/champion/{champ_clean}.png"
+    net.add_node(champ, label=champ, shape="circularImage", image=img_url)
+
+# Salvar e exibir grafo
+net.save_graph("graph.html")
+with open("graph.html", "r", encoding="utf-8") as f:
+    html = f.read()
+components.html(html, height=650)
