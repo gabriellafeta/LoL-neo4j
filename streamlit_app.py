@@ -73,4 +73,5 @@ filtered_df = apply_filters(
 )
 
 # Mostrar resultado
+st.markdown(f"### Resultado com {len(filtered_df)} linhas")
 st.dataframe(filtered_df)
