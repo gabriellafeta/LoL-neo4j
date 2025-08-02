@@ -130,26 +130,25 @@ st.dataframe(filtered_df)
 edges = generate_edges(filtered_df)
 nodes = set()
 
-net = Network(height="600px", width="100%", bgcolor="#222", font_color="white")
+# Grafo mais leve
+net = Network(height="600px", width="100%", bgcolor="#ffffff", font_color="black")
 
-# Adiciona arestas com cor baseada na tag
+# Adiciona arestas genéricas
 for edge in edges:
-    nodes.add(edge["source"])
-    nodes.add(edge["target"])
-    color = "red" if edge["relation"] == "Historically bad" else "green"
+    source = edge["source"]
+    target = edge["target"]
+    label = edge["relation"]
 
-    net.add_edge(edge["source"], edge["target"], 
-                 title=f"{edge['relation']}<br>{edge['weight']:.1f}%", 
-                 color=color)
+    nodes.add(source)
+    nodes.add(target)
 
-# Adiciona os nós com imagem dos campeões
+    net.add_edge(source, target, title=label)
+
+# Adiciona nós simples (sem imagem)
 for champ in nodes:
-    champ_clean = champ.replace(" ", "").replace("'", "")
-    img_url = f"https://ddragon.leagueoflegends.com/cdn/14.14.1/img/champion/{champ_clean}.png"
-    net.add_node(champ, label=champ, shape="circularImage", image=img_url)
+    net.add_node(champ, label=champ)
 
-# Salvar e exibir grafo
+# Renderizar
 net.save_graph("graph.html")
 with open("graph.html", "r", encoding="utf-8") as f:
     html = f.read()
-components.html(html, height=650)
