@@ -127,28 +127,3 @@ filtered_df = apply_filters(
 st.markdown(f"### Resultado com {len(filtered_df)} linhas")
 st.dataframe(filtered_df)
 ##--------------------------------------------------------------------------------------------------------------------------------
-edges = generate_edges(filtered_df)
-nodes = set()
-
-# Grafo mais leve
-net = Network(height="600px", width="100%", bgcolor="#ffffff", font_color="black")
-
-# Adiciona arestas genéricas
-for edge in edges:
-    source = edge["source"]
-    target = edge["target"]
-    label = edge["relation"]
-
-    nodes.add(source)
-    nodes.add(target)
-
-    net.add_edge(source, target, title=label)
-
-# Adiciona nós simples (sem imagem)
-for champ in nodes:
-    net.add_node(champ, label=champ)
-
-# Renderizar
-net.save_graph("graph.html")
-with open("graph.html", "r", encoding="utf-8") as f:
-    html = f.read()
