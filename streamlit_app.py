@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import networkx as nx
 import plotly.graph_objects as go
 
 # Configuração do Streamlit
