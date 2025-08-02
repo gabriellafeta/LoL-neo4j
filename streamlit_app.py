@@ -14,18 +14,22 @@ df = pd.read_csv(file_path)
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Funções
 
-def apply_filters(df, league, playoffs, split, side, position):
+def apply_filters(df, league, playoffs, split, side, position, champion, matchup):
     filtered = df.copy()
-    if league != "Todos":
+    if league != "All":
         filtered = filtered[filtered["league"] == league]
-    if playoffs != "Todos":
+    if playoffs != "All":
         filtered = filtered[filtered["playoffs"] == playoffs]
-    if split != "Todos":
+    if split != "All":
         filtered = filtered[filtered["split"] == split]
-    if side != "Todos":
+    if side != "All":
         filtered = filtered[filtered["side"] == side]
-    if position != "Todos":
+    if position != "All":
         filtered = filtered[filtered["position"] == position]
+    if champion != "All":
+        filtered = filtered[filtered["champion"] == champion]
+    if matchup != "All":
+        filtered = filtered[filtered["champion_matchup"] == matchup]
     return filtered
 
 
@@ -44,19 +48,19 @@ with colA[0]:
     st.title("📊 Visualização da Tabela de Matchups")
 
 with col1:
-    league_filter = st.selectbox("League", options=["Todos"] + sorted(df['league'].dropna().unique().tolist()))
+    league_filter = st.selectbox("League", options=["All"] + sorted(df['league'].dropna().unique().tolist()))
 with col2:
-    playoffs_filter = st.selectbox("Playoffs", options=["Todos"] + sorted(df['playoffs'].dropna().unique().tolist()))
+    playoffs_filter = st.selectbox("Playoffs", options=["All"] + sorted(df['playoffs'].dropna().unique().tolist()))
 with col3:
-    split_filter = st.selectbox("Split", options=["Todos"] + sorted(df['split'].dropna().unique().tolist()))
+    split_filter = st.selectbox("Split", options=["All"] + sorted(df['split'].dropna().unique().tolist()))
 with col4:
-    side_filter = st.selectbox("Side", options=["Todos"] + sorted(df['side'].dropna().unique().tolist()))
+    side_filter = st.selectbox("Side", options=["All"] + sorted(df['side'].dropna().unique().tolist()))
 with col5:
-    position_filter = st.selectbox("Position", options=["Todos"] + sorted(df['position'].dropna().unique().tolist()))
+    position_filter = st.selectbox("Position", options=["All"] + sorted(df['position'].dropna().unique().tolist()))
 with col6:
-    champion_filter = st.selectbox("Champion", options=["Todos"] + sorted(df['champion'].dropna().unique().tolist()))
+    champion_filter = st.selectbox("Champion", options=["All"] + sorted(df['champion'].dropna().unique().tolist()))
 with col7:
-    matchup_filter = st.selectbox("Matchup", options=["Todos"] + sorted(df['champion_matchup'].dropna().unique().tolist()))
+    matchup_filter = st.selectbox("Matchup", options=["All"] + sorted(df['champion_matchup'].dropna().unique().tolist()))
 
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Filtros
@@ -68,8 +72,8 @@ filtered_df = apply_filters(
     split=split_filter,
     side=side_filter,
     position=position_filter,
-    champion = champion_filter,
-    matchup = matchup_filter
+    champion=champion_filter,
+    matchup=matchup_filter
 )
 
 # Mostrar resultado
