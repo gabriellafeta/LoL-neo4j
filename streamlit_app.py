@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-import plotly.graph_objects as go
 
 # Configuração do Streamlit
 st.set_page_config(page_title="LoL Draft Graph", layout="wide")
