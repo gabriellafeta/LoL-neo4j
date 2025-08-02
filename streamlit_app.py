@@ -8,12 +8,6 @@ import streamlit.components.v1 as components
 st.set_page_config(page_title="LoL Draft Graph", layout="wide")
 
 ##--------------------------------------------------------------------------------------------------------------------------------
-# Data
-
-file_path = "matchup_stats.csv" 
-
-df = pd.read_csv(file_path)
-##--------------------------------------------------------------------------------------------------------------------------------
 # Funções
 # Filtros
 def apply_filters(df, league, playoffs, split, side, position, champion, matchup):
@@ -52,7 +46,42 @@ def generate_edges(df):
         })
     return edges
 
+
+# Relações
+def add_champion_traits(df):
+    # Early game
+    df["EarlyGameType"] = df.apply(
+        lambda row: "Bad Early Game" if sum([
+            row["golddiffat15"] < 0,
+            row["xpdiffat15"] < 0,
+            row["csdiffat15"] < 0
+        ]) >= 2 else "Good Early Game",
+        axis=1
+    )
+
+    # Late game (por enquanto igual, pode ser ajustado depois com outros critérios)
+    df["LateGameType"] = df.apply(
+        lambda row: "Bad Late Game" if sum([
+            row["golddiffat15"] < 0,
+            row["xpdiffat15"] < 0,
+            row["csdiffat15"] < 0
+        ]) >= 2 else "Good Late Game",
+        axis=1
+    )
+
+    # Win rate e tag
+    df["WinRate"] = df["wins"] / df["games_played"] * 100
+    df["WinRateTag"] = df["WinRate"].apply(lambda x: "Historically bad" if x < 50 else "Historically good")
+
+    return df
 ##--------------------------------------------------------------------------------------------------------------------------------
+
+file_path = "matchup_stats.csv"
+df = pd.read_csv(file_path)
+df = add_champion_traits(df)
+
+##--------------------------------------------------------------------------------------------------------------------------------
+
 # Cols
 
 colA = st.columns(1)
