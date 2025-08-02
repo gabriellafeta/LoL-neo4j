@@ -1,8 +1,5 @@
 import pandas as pd
 import streamlit as st
-from pyvis.network import Network
-import streamlit.components.v1 as components
-
 
 # Configuração do Streamlit
 st.set_page_config(page_title="LoL Draft Graph", layout="wide")
