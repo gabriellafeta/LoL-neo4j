@@ -36,7 +36,7 @@ def apply_filters(df, league, playoffs, split, side, position):
 colA = st.columns(1)
 colB = st.columns(1)
 
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Page Layout
 
@@ -53,6 +53,10 @@ with col4:
     side_filter = st.selectbox("Side", options=["Todos"] + sorted(df['side'].dropna().unique().tolist()))
 with col5:
     position_filter = st.selectbox("Position", options=["Todos"] + sorted(df['position'].dropna().unique().tolist()))
+with col6:
+    champion_filter = st.selectbox("Champion", options=["Todos"] + sorted(df['champion'].dropna().unique().tolist()))
+with col7:
+    matchup_filter = st.selectbox("Matchup", options=["Todos"] + sorted(df['champion_matchup'].dropna().unique().tolist()))
 
 ##--------------------------------------------------------------------------------------------------------------------------------
 # Filtros
@@ -63,9 +67,10 @@ filtered_df = apply_filters(
     playoffs=playoffs_filter,
     split=split_filter,
     side=side_filter,
-    position=position_filter
+    position=position_filter,
+    champion = champion_filter,
+    matchup = matchup_filter
 )
 
 # Mostrar resultado
-st.markdown(f"### Resultado com {len(filtered_df)} linhas")
 st.dataframe(filtered_df)
